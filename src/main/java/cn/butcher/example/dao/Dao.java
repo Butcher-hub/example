@@ -31,7 +31,7 @@ public class Dao {
             Class.forName(driver);
             conn = DriverManager.getConnection(url,user,password);
         } catch (IOException | ClassNotFoundException | SQLException e) {
-            System.out.println("啊偶，资源找不到");
+            System.out.println("啊偶，资源找不到:"+e.getMessage());
         }
     }
 
