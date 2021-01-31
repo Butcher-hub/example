@@ -113,9 +113,8 @@ public class Dao {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url,"root","tx2437");
-            String sql ="select studentID,name,birth,class from t_mesage where name LIKE \"%?%\" ";
+            String sql ="select studentID,name,birth,class from t_mesage where name LIKE \"%"+name+"%\" ";
             ps = conn.prepareStatement(sql);
-            ps.setString(1,name);
             rs = ps.executeQuery();
 
             while (rs.next()){

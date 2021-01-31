@@ -213,6 +213,29 @@
 
 		</script>
 		<script>
+			function query() {
+                var name = $("#querytext").val();
+				$.get("query","name="+name,function (res) {
+                    $("#table").empty();
+				    $.each(res,function (i,e) {
+                        $("#table").append("<tr>\n" +
+                            "\t\t\t\t\t\t\t\t<td><input type=\"checkbox\" name=\"\" lay-skin=\"primary\" data-id=\"1\"></td>\n" +
+                            "\t\t\t\t\t\t\t\t<td class=\"hidden-xs\">"+(i+1)+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td class=\"hidden-xs\">"+e.studentID+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+e.name+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+e.birth+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>"+e.classname+"</td>\n" +
+                            "\t\t\t\t\t\t\t\t<td>\n" +
+                            "\t\t\t\t\t\t\t\t\t<div class=\"layui-inline\">\n" +
+                            "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  add-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe654;</i></button>\n" +
+                            "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  edit-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe642;</i></button>\n" +
+                            "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-danger del-btn\" data-id=\"1\" data-url=\"del.html\"><i class=\"layui-icon\">&#xe640;</i></button>\n" +
+                            "\t\t\t\t\t\t\t\t\t</div>\n" +
+                            "\t\t\t\t\t\t\t\t</td>\n" +
+                            "\t\t\t\t\t\t\t</tr>")
+                    })
+                });
+            }
             function updatePage(index) {
                 $.ajax({
                     url:'mes',
@@ -257,9 +280,9 @@
 							<button type="button" style="width:30px;border: none" onclick="popBox()"><img src="../img/add.png" width="100%"></button>
 						</div>
 						<div class="layui-inline">
-							<input type="text" name="title" placeholder="请输入标题" autocomplete="off" class="layui-input">
+							<input type="text" id="querytext"  placeholder="请输入姓名关键字" autocomplete="off" class="layui-input">
 						</div>
-						<button class="layui-btn layui-btn-normal" lay-submit="search">搜索</button>
+						<button class="layui-btn layui-btn-normal" lay-submit="search" onclick="query()">搜索</button>
 					</div>
 				<!--</form>-->
 				<div class="layui-form" id="table-list">
