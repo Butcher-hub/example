@@ -8,6 +8,6 @@ import cn.butcher.example.dao.Dao;
  */
 public class Test05 {
     public static void main(String[] args) {
-        Dao.del("184");
+        Dao.del("186");
     }
 }
