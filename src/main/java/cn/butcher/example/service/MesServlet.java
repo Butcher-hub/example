@@ -21,20 +21,15 @@ import java.util.List;
 public class MesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        System.out.println("kkk");
         request.setCharacterEncoding("UTF-8");
         String page = request.getParameter("page");
         int index = Integer.parseInt(page)-1;
         if (index>0){
-            // 1 2
-            System.out.println(index);
             index = index*12;
-            System.out.println(index);
         }
         List<Student> students = Dao.getStudentAsPage(index);
         ObjectMapper objectMapper = new ObjectMapper();
         String stus = objectMapper.writeValueAsString(students);
-        System.out.println(stus);
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter out = response.getWriter();
         out.println(stus);

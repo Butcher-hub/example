@@ -2,9 +2,12 @@ package cn.butcher.example.dao;
 
 import cn.butcher.example.bean.Student;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @Author: butcher
@@ -14,17 +17,32 @@ public class Dao {
     private static Connection conn;
     private static PreparedStatement ps;
     private static ResultSet rs;
-    private static String url="jdbc:mysql://localhost:3306/testdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static String url="";
+
+    private static void load(){
+        Properties properties = new Properties();
+        InputStream resource = Dao.class.getClassLoader().getResourceAsStream("jdbc.properties");
+        try {
+            properties.load(resource);
+            String driver = properties.getProperty("driver");
+            url = properties.getProperty("url");
+            String user = properties.getProperty("user");
+            String password = properties.getProperty("password");
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url,user,password);
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            System.out.println("啊偶，资源找不到");
+        }
+    }
+
 
     public static List<Student> getStudent(){
         List<Student> list = new ArrayList<>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url,"root","tx2437");
+            load();
             String sql ="select id,studentID,name,birth,class from t_mesage";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-
             while (rs.next()){
                 Student student = new Student();
                 student.setId(rs.getString("id"));
@@ -34,67 +52,25 @@ public class Dao {
                 student.setClassname(rs.getString("class"));
                 list.add(student);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch ( SQLException e) {
             e.printStackTrace();
         }finally {
-            if (rs!=null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps!=null){
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn!=null){
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close();
         }
         return list;
     }
-
     public static void del(String id){
        int result = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url,"root","tx2437");
+            load();
             String sql ="delete from t_mesage where id="+id;
             ps = conn.prepareStatement(sql);
             result = ps.executeUpdate();
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch ( SQLException e) {
             e.printStackTrace();
         }finally {
-            if (rs!=null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps!=null){
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn!=null){
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close();
         }
         if (result==1){
             System.out.println(id+"删除成功");
@@ -105,8 +81,7 @@ public class Dao {
     public static List<Student> getStudentAsPage(int index){
         List<Student> list = new ArrayList<>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url,"root","tx2437");
+            load();
             String sql ="select id,studentID,name,birth,class from t_mesage limit ?,12 ";
             ps = conn.prepareStatement(sql);
             ps.setInt(1,index);
@@ -121,30 +96,10 @@ public class Dao {
                 student.setClassname(rs.getString("class"));
                 list.add(student);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch ( SQLException e) {
             e.printStackTrace();
         }finally {
-            if (rs!=null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps!=null){
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn!=null){
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close();
         }
         return list;
     }
@@ -152,8 +107,7 @@ public class Dao {
     public static List<Student> queryByName(String name){
         List<Student> list = new ArrayList<>();
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url,"root","tx2437");
+           load();
             String sql ="select id,studentID,name,birth,class from t_mesage where name LIKE \"%"+name+"%\" ";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -167,30 +121,10 @@ public class Dao {
                 student.setClassname(rs.getString("class"));
                 list.add(student);
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch ( SQLException e) {
             e.printStackTrace();
         }finally {
-            if (rs!=null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps!=null){
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn!=null){
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close();
         }
         return list;
     }
@@ -198,8 +132,7 @@ public class Dao {
     public static void add(Student student){
         int result = 0;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url,"root","tx2437");
+            load();
             String sql ="insert into t_mesage(studentID,name,birth,class) values(?,?,?,?)";
             ps = conn.prepareStatement(sql);
             ps.setString(1,student.getStudentID());
@@ -207,30 +140,10 @@ public class Dao {
             ps.setString(3,student.getBirth());
             ps.setString(4,student.getClassname());
             result = ps.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("啊偶添加失败了喔:"+e.getMessage());
         }finally {
-            if (rs!=null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps!=null){
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn!=null){
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close();
         }
         if (result==1){
             System.out.println("数据插入成功！");
@@ -240,39 +153,41 @@ public class Dao {
 
     public static int getCount(){
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(url,"root","tx2437");
+           load();
             String sql ="select studentID,name,birth,class from t_mesage";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             rs.last();
             int count = rs.getRow();
             return count;
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch ( SQLException e) {
             e.printStackTrace();
         }finally {
-            if (rs!=null){
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (ps!=null){
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (conn!=null){
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            close();
         }
     return 0;
+    }
+    private static void close(){
+        if (rs!=null){
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (ps!=null){
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (conn!=null){
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
