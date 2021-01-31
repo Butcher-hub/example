@@ -5,10 +5,14 @@ package cn.butcher.example.bean;
  * @Date: 2021/01/30/19:43
  */
 public class Student {
+
+    private String id;
     private String studentID;
     private String name;
     private String birth;
     private String classname;
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public String getStudentID() {
         return studentID;

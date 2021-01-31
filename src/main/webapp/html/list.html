@@ -62,9 +62,7 @@
                                 "\t\t\t\t\t\t\t\t<td>"+e.classname+"</td>\n" +
                                 "\t\t\t\t\t\t\t\t<td>\n" +
                                 "\t\t\t\t\t\t\t\t\t<div class=\"layui-inline\">\n" +
-                                "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  add-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe654;</i></button>\n" +
-                                "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  edit-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe642;</i></button>\n" +
-                                "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-danger del-btn\" data-id=\"1\" data-url=\"del.html\"><i class=\"layui-icon\">&#xe640;</i></button>\n" +
+                                "\t\t\t\t\t\t\t\t\t\t<button type=\"button\" style=\"width:20px;border: none;background-color: transparent;\n\" onclick=\"deleteBy("+e.id+")\"><img src=\"../img/del.png\" width=\"100%\"></button>\n" +
                                 "\t\t\t\t\t\t\t\t\t</div>\n" +
                                 "\t\t\t\t\t\t\t\t</td>\n" +
                                 "\t\t\t\t\t\t\t</tr>")
@@ -72,6 +70,17 @@
                    }
                })
            })
+
+			function deleteBy(id) {
+				$.ajax({
+					url:"del",
+					method:"get",
+					data:"id="+id,
+					success:function (res) {
+						alert(id+"删除成功")
+                    }
+				})
+            }
 		</script>
 		<script>
 
@@ -227,9 +236,7 @@
                             "\t\t\t\t\t\t\t\t<td>"+e.classname+"</td>\n" +
                             "\t\t\t\t\t\t\t\t<td>\n" +
                             "\t\t\t\t\t\t\t\t\t<div class=\"layui-inline\">\n" +
-                            "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  add-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe654;</i></button>\n" +
-                            "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  edit-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe642;</i></button>\n" +
-                            "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-danger del-btn\" data-id=\"1\" data-url=\"del.html\"><i class=\"layui-icon\">&#xe640;</i></button>\n" +
+                            "\t\t\t\t\t\t\t\t\t\t<button type=\"button\" style=\"width:20px;border: none;background-color: transparent;\n\" onclick=\"deleteBy("+e.id+")\"><img src=\"../img/del.png\" width=\"100%\"></button>\n" +
                             "\t\t\t\t\t\t\t\t\t</div>\n" +
                             "\t\t\t\t\t\t\t\t</td>\n" +
                             "\t\t\t\t\t\t\t</tr>")
@@ -260,9 +267,7 @@
                                 "\t\t\t\t\t\t\t\t<td>"+e.classname+"</td>\n" +
                                 "\t\t\t\t\t\t\t\t<td>\n" +
                                 "\t\t\t\t\t\t\t\t\t<div class=\"layui-inline\">\n" +
-                                "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  add-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe654;</i></button>\n" +
-                                "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-normal  edit-btn\" data-id=\"1\" data-url=\"menu-add2.html\"><i class=\"layui-icon\">&#xe642;</i></button>\n" +
-                                "\t\t\t\t\t\t\t\t\t\t<button class=\"layui-btn layui-btn-mini layui-btn-danger del-btn\" data-id=\"1\" data-url=\"del.html\"><i class=\"layui-icon\">&#xe640;</i></button>\n" +
+                                "\t\t\t\t\t\t\t\t\t\t<button type=\"button\" style=\"width:20px;border: none;background-color: transparent;\n\" onclick=\"deleteBy("+e.id+")\"><img src=\"../img/del.png\" width=\"100%\"></button>\n" +
                                 "\t\t\t\t\t\t\t\t\t</div>\n" +
                                 "\t\t\t\t\t\t\t\t</td>\n" +
                                 "\t\t\t\t\t\t\t</tr>")
@@ -277,7 +282,7 @@
 				<!--form class="layui-form" action="">-->
 					<div class="layui-form-item">
 						<div class="layui-inline tool-btn">
-							<button type="button" style="width:30px;border: none" onclick="popBox()"><img src="../img/add.png" width="100%"></button>
+							<button type="button" style="width:20px;border: none" onclick="popBox()"><img src="../img/add.png" width="100%"></button>
 						</div>
 						<div class="layui-inline">
 							<input type="text" id="querytext"  placeholder="请输入姓名关键字" autocomplete="off" class="layui-input">
@@ -308,21 +313,6 @@
 							</tr>
 						</thead>
 						<tbody id="table">
-							<tr>
-								<td><input type="checkbox" name="" lay-skin="primary" data-id="1"></td>
-								<td class="hidden-xs">1</td>
-								<td class="hidden-xs">1800500926</td>
-								<td>谭熙</td>
-								<td>2020-10-10</td>
-								<td>18005801</td>
-								<td>
-									<div class="layui-inline">
-										<button class="layui-btn layui-btn-mini layui-btn-normal  add-btn" data-id="1" data-url="menu-add2.html"><i class="layui-icon">&#xe654;</i></button>
-										<button class="layui-btn layui-btn-mini layui-btn-normal  edit-btn" data-id="1" data-url="menu-add2.html"><i class="layui-icon">&#xe642;</i></button>
-										<button class="layui-btn layui-btn-mini layui-btn-danger del-btn" data-id="1" data-url="del.html"><i class="layui-icon">&#xe640;</i></button>
-									</div>
-								</td>
-							</tr>
 
 						</tbody>
 					</table>

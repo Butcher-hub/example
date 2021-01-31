@@ -21,12 +21,13 @@ public class Dao {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url,"root","tx2437");
-            String sql ="select studentID,name,birth,class from t_mesage";
+            String sql ="select id,studentID,name,birth,class from t_mesage";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()){
                 Student student = new Student();
+                student.setId(rs.getString("id"));
                 student.setStudentID(rs.getString("studentID"));
                 student.setName(rs.getString("name"));
                 student.setBirth(rs.getString("birth"));
@@ -61,19 +62,59 @@ public class Dao {
         return list;
     }
 
+    public static void del(String id){
+       int result = 0;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url,"root","tx2437");
+            String sql ="delete from t_mesage where id="+id;
+            ps = conn.prepareStatement(sql);
+            result = ps.executeUpdate();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }finally {
+            if (rs!=null){
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (ps!=null){
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn!=null){
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (result==1){
+            System.out.println(id+"删除成功");
+        }
+    }
+
 
     public static List<Student> getStudentAsPage(int index){
         List<Student> list = new ArrayList<>();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url,"root","tx2437");
-            String sql ="select studentID,name,birth,class from t_mesage limit ?,12 ";
+            String sql ="select id,studentID,name,birth,class from t_mesage limit ?,12 ";
             ps = conn.prepareStatement(sql);
             ps.setInt(1,index);
             rs = ps.executeQuery();
 
             while (rs.next()){
                 Student student = new Student();
+                student.setId(rs.getString("id"));
                 student.setStudentID(rs.getString("studentID"));
                 student.setName(rs.getString("name"));
                 student.setBirth(rs.getString("birth"));
@@ -113,12 +154,13 @@ public class Dao {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url,"root","tx2437");
-            String sql ="select studentID,name,birth,class from t_mesage where name LIKE \"%"+name+"%\" ";
+            String sql ="select id,studentID,name,birth,class from t_mesage where name LIKE \"%"+name+"%\" ";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()){
                 Student student = new Student();
+                student.setId(rs.getString("id"));
                 student.setStudentID(rs.getString("studentID"));
                 student.setName(rs.getString("name"));
                 student.setBirth(rs.getString("birth"));
