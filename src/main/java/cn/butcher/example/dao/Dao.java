@@ -154,11 +154,11 @@ public class Dao {
     public static int getCount(){
         try {
            load();
-            String sql ="select studentID,name,birth,class from t_mesage";
+            String sql ="select count(*) as c from t_mesage";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            rs.last();
-            int count = rs.getRow();
+            rs.next();
+            int count = rs.getInt("c");
             return count;
         } catch ( SQLException e) {
             e.printStackTrace();
