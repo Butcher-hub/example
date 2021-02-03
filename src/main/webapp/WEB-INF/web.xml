@@ -4,4 +4,12 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+    <servlet>
+        <servlet-name>MesageServlet</servlet-name>
+        <servlet-class>cn.butcher.example.service.MesageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MesageServlet</servlet-name>
+        <url-pattern>/mesage</url-pattern>
+    </servlet-mapping>
 </web-app>

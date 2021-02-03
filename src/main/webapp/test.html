@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>数据表格</title>
+		<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+		<script src="layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<table id="t1">
+
+		</table>
+
+		<script>
+            layui.use('table', function(){
+                var table = layui.table;
+
+                //第一个实例
+                table.render({
+                    elem: "#t1"
+                    ,height: 312
+                    ,url: "mesage" //数据接口
+                    ,page: true //开启分页
+
+                    ,cols: [[ //表头
+                        {field: 'id', title: 'ID', width:80, sort: true,}
+                        ,{field: 'studentID', title: '学号', width:120, sort: true}
+                        ,{field: 'name', title: '姓名', width:100}
+                        ,{field: 'birth', title: '生日', width:120}
+                        ,{field: 'classname', title: '班级', width: 177}
+
+                    ]]
+                });
+
+            });
+		</script>
+	</body>
+</html>
