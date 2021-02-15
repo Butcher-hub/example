@@ -23,11 +23,9 @@ public class MesServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         String page = request.getParameter("page");
-        int index = Integer.parseInt(page)-1;
-        if (index>0){
-            index = index*12;
-        }
-        List<Student> students = Dao.getStudentAsPage(index);
+        String limit = request.getParameter("limit");
+
+        List<Student> students = Dao.getStudentAsPage(page,limit);
         ObjectMapper objectMapper = new ObjectMapper();
         String stus = objectMapper.writeValueAsString(students);
         response.setContentType("application/json;charset=UTF-8");

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>数据表格</title>
+		<link rel="stylesheet" type="text/css" href="../layui/css/layui.css"/>
+		<script src="../layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<table id="t1" lay-filter="test1">
+
+		</table>
+
+		<script>
+            layui.use('table', function(){
+                var table = layui.table;
+
+                //第一个实例
+                table.render({
+                    elem: "#t1"
+                    ,height: 600
+                    ,url: "getOrder" //数据接口
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'year', title: '年份', width:80, sort: true,}
+                        ,{field: 'name', title: '客户', width:80}
+                        ,{field: 'purchaseid', title: '采购号', width:150}
+                        ,{field: 'produceid', title: '生产编号', width:120}
+                        ,{field: 'orderdate', title: '接单日期', width: 110, sort: true}
+                        ,{field: 'specification', title: '规格型号', width: 210}
+                        ,{field: 'material', title: '材质', width: 110}
+                        ,{field: 'raise', title: '加注型号', width: 100}
+                        ,{field: 'surface', title: '表面处理', width: 110}
+                        ,{field: 'quantity', title: '数量', width: 60, sort: true}
+                        ,{field: 'price', title: '单价', width: 60, sort: true}
+                        ,{field: 'totalprice', title: '总额', width: 100, sort: true}
+                        ,{field: 'deliver', title: '要求交期', width: 120, sort: true}
+                        ,{fixed: 'right', width:170, align:'center', toolbar: '#barDemo'}
+                    ]],
+                    toolbar: '#toolbarDemo'  //通过id获取头工具栏
+
+
+                });
+
+                //监听头工具栏事件
+                table.on('toolbar(test1)', function(obj){
+                    //console.log(obj.config)
+
+                    // obj.config.id获取当前容器的id
+                    var checkStatus = table.checkStatus(obj.config.id);
+
+                    //checkStatus可以获取到表格选中的数据data,以及isAll是否全选了
+
+
+                    // console.log(checkStatus.isAll)
+
+                    // checkStatus.data[0].id获取到数据表中的数据
+                    // console.log(checkStatus.data[0].id)
+
+                    //checkStatus.data.length获取长度
+                    console.log(checkStatus.data.length)
+
+                    // obj.event当前容器的事件
+                    switch(obj.event){
+                        case 'add':
+                            layer.msg('添加');
+                            break;
+                        case 'delete':
+                            layer.msg('删除');
+                            break;
+                        case 'update':
+                            layer.msg('编辑');
+                            break;
+                    };
+                });
+
+                //监听行工具事件
+                table.on("tool(test1)",function(obj){
+                    // console.log(obj)
+                    // console.log(obj.data)
+
+                    var mes = obj.data;
+                    console.log(obj.event)
+                    var eventName=obj.event;
+
+                    if(eventName=="detail"){
+
+                        //JSON.stringify蒋json数据序列化为字符串
+                        layer.msg(JSON.stringify(mes))
+                    } else if(eventName=="edit"){
+
+                        //输入框
+                        //  layer.prompt({
+                        // fromTyep:0, //0是文本框,1是密码框,2是文本域
+                        // value:mes.name //给文本框赋值
+                        //
+                        //  },function(value,index){
+                        //   obj.update({name:value});
+                        //   layer.close(index);
+                        //  })
+
+                        console.log(obj)
+
+                    } else if(eventName=="del"){
+                        //确认框
+                        layer.confirm("您确认删除吗？",function(index){
+                            obj.del();
+                            layer.close(index);
+                        })
+                    }
+
+
+                })
+
+                //监听编辑操作
+                table.on('edit(test1)',function(obj){
+                    console.log(obj.value); //得到修改后的值
+                    console.log(obj.field); //当前编辑的字段名
+                    console.log(obj.data); //所在行的所有相关数据
+                });
+
+
+            });
+
+            // 行工具
+		</script>
+
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-xs" lay-event="detail">查看</a>
+			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+			<!-- 这里同样支持 laytpl 语法，如： -->
+			{{#  if(d.auth > 2){ }}
+			<a class="layui-btn layui-btn-xs" lay-event="check">审核</a>
+			{{#  } }}
+		</script>
+
+		<!-- 表头工具 -->
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+				<button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+				<button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
+				<button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
+			</div>
+
+		</script>
+
+
+	</body>
+</html>

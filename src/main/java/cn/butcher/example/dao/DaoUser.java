@@ -61,6 +61,20 @@ public class DaoUser {
     public static void addClockStart(String startTime,String userid,String day){
         int res = -1;
         try {
+
+            if (check(userid,day)){
+                //如果在日期存在
+                load();
+                String sql ="UPDATE t_clockin SET startime=? WHERE userid=? and day=?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1,startTime);
+                ps.setString(2,userid);
+                ps.setString(3,day);
+                res = ps.executeUpdate();
+                close();
+                return;
+            }
+
             load();
             String sql ="insert into t_clockin(startime,userid,day) values(?,?,?)";
             ps = conn.prepareStatement(sql);
@@ -82,13 +96,27 @@ public class DaoUser {
     public static void addClockEnd(String endTime,String userid,String day){
         int res = -1;
         try {
+
+            if (check(userid,day)){
+                //如果日期存在
+                load();
+                String sql ="UPDATE t_clockin SET endtime=? WHERE userid=? and day=?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1,endTime);
+                ps.setString(2,userid);
+                ps.setString(3,day);
+                res = ps.executeUpdate();
+                close();
+                return;
+            }
             load();
-            String sql ="UPDATE t_clockin SET endtime=? WHERE userid=? and day=?";
+            String sql ="insert into t_clockin(endtime,userid,day) values(?,?,?)";
             ps = conn.prepareStatement(sql);
             ps.setString(1,endTime);
             ps.setString(2,userid);
             ps.setString(3,day);
             res = ps.executeUpdate();
+
 
         }catch ( SQLException e) {
             e.printStackTrace();
@@ -100,7 +128,27 @@ public class DaoUser {
         }
     }
 
+    public static boolean check(String userid,String day){
+        boolean isIn = false;
+        try {
+            load();
+            String sql ="select *from t_clockin WHERE userid=? and day=?";
+            ps = conn.prepareStatement(sql);
 
+            ps.setString(1,userid);
+            ps.setString(2,day);
+            rs = ps.executeQuery();
+            if (rs.next()){
+               isIn = true;
+            }
+
+        }catch ( SQLException e) {
+            e.printStackTrace();
+        }finally {
+            close();
+        }
+        return isIn;
+    }
     private static void close(){
         if (rs!=null){
             try {

@@ -19,14 +19,14 @@ public class Test01 {
 ////            System.out.println(s.getName());
 ////        }
 //        List<Student> students = Dao.getStudent();
-        List<Student> students = Dao.getStudentAsPage(0);
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            System.out.println(students.size());
-            String stus = objectMapper.writeValueAsString(students);
-            System.out.println(stus);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+//        List<Student> students = Dao.getStudentAsPage(0);
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            System.out.println(students.size());
+//            String stus = objectMapper.writeValueAsString(students);
+//            System.out.println(stus);
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
     }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>验证码</title>
+		<script>
+            function changeCode(){
+
+                var src = " verifycode?"+new Date().getTime(); //加时间戳，防止浏览器利用缓存
+
+                document.getElementById("v").src=src             //jQuery写法
+
+            }
+		</script>
+	</head>
+	<body>
+
+
+		<input class="verifyInput"  name="verifyInput" placeholder="请输入验证码">
+
+
+		<img id="v" class="verifyCode" onclick="changeCode()" src="verifycode">
+
+
+
+
+
+	</body>
+</html>

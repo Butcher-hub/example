@@ -6,10 +6,7 @@ import com.sun.imageio.plugins.common.I18N;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -25,12 +22,22 @@ public class LoginServlet extends HttpServlet {
         String userid = request.getParameter("userid");
         String userpassword = request.getParameter("userpassword");
         String unpassword = request.getParameter("unpassword");
+        String verifycode = request.getParameter("verifycode");
+        HttpSession session = request.getSession();
+        String v = (String)session.getAttribute("verifyCode");
         User user = DaoUser.getUser(Integer.parseInt(userid));
         String mes ="";
-        if (user!=null){
+
+
+         if (user!=null){
             if (user.getUserid()== Integer.parseInt(userid) && userpassword.equals(user.getUserpassword())){
+                if(v.toLowerCase().equals(verifycode.toLowerCase())){
+                    mes="yes";
+                }else {
+                    mes="vfail";
+                }
                 //返回yes
-                mes="yes";
+
                 if (unpassword.equals("1")){
                     Cookie useridcookie = new Cookie("userid",userid);
                     Cookie userpasswordcookie = new Cookie("userpassword",userpassword);
@@ -40,6 +47,8 @@ public class LoginServlet extends HttpServlet {
                     userpasswordcookie.setMaxAge(600);
                     response.addCookie(useridcookie);
                     response.addCookie(userpasswordcookie);
+
+                    session.setAttribute("userid",userid);
                 }
             }else {
                 //返回no

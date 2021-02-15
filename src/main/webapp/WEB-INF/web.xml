@@ -4,6 +4,9 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+    <welcome-file-list>
+        <welcome-file>check</welcome-file>
+    </welcome-file-list>
     <servlet>
         <servlet-name>MesageServlet</servlet-name>
         <servlet-class>cn.butcher.example.service.MesageServlet</servlet-class>

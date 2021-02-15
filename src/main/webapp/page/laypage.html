@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>layui分页展示</title>
+		<link rel="stylesheet" href="../layui/css/layui.css">
+		<script src="../layui/layui.js"></script>
+	</head>
+	<body>
+		<table id="table1"></table>
+
+		<script>
+			layui.use('table',function () {
+                var table = layui.table;
+
+                //第一个实例
+                table.render({
+                    elem: "#table1"
+                    ,url: "laypage" //数据接口
+                    ,page: true //开启分页
+                    ,cols: [[ //表头
+                        {field: 'id', title: 'ID', width:80, sort: true,}
+                        ,{field: 'studentID', title: '学号', width:80}
+                        ,{field: 'name', title: '姓名', width:80}
+                        ,{field: 'birth', title: '生日', width:80}
+                        ,{field: 'classname', title: '班级', width: 177}
+                    ]]
+                });
+            })
+		</script>
+	</body>
+</html>

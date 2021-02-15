@@ -1,5 +1,6 @@
 package cn.butcher.example.dao;
 
+import cn.butcher.example.bean.Order;
 import cn.butcher.example.bean.Student;
 
 import java.io.IOException;
@@ -11,9 +12,9 @@ import java.util.Properties;
 
 /**
  * @Author: butcher
- * @Date: 2021/01/30/19:36
+ * @Date: 2021/02/05/11:56
  */
-public class Dao {
+public class DaoOrder {
     private static Connection conn;
     private static PreparedStatement ps;
     private static ResultSet rs;
@@ -36,31 +37,9 @@ public class Dao {
     }
 
 
-    public static List<Student> getStudent(){
-        List<Student> list = new ArrayList<>();
-        try {
-            load();
-            String sql ="select id,studentID,name,birth,class from t_mesage";
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()){
-                Student student = new Student();
-                student.setId(rs.getString("id"));
-                student.setStudentID(rs.getString("studentID"));
-                student.setName(rs.getString("name"));
-                student.setBirth(rs.getString("birth"));
-                student.setClassname(rs.getString("class"));
-                list.add(student);
-            }
-        } catch ( SQLException e) {
-            e.printStackTrace();
-        }finally {
-            close();
-        }
-        return list;
-    }
+
     public static void del(String id){
-       int result = 0;
+        int result = 0;
         try {
             load();
             String sql ="delete from t_mesage where id="+id;
@@ -78,28 +57,37 @@ public class Dao {
     }
 
 
-    public static List<Student> getStudentAsPage(String page,String limit){
+    public static List<Order> getOrderAsPage(String page, String limit){
         int index = Integer.parseInt(page)-1;
         if (index>0){
-            index = index*12;
+            index = index*Integer.parseInt(limit);
         }
-        List<Student> list = new ArrayList<>();
+        List<Order> list = new ArrayList<>();
         try {
             load();
-            String sql ="select id,studentID,name,birth,class from t_mesage limit ?,? ";
+            String sql ="select year,name,purchaseid,produceid,orderdate,specification,material,raise,surface,quantity,price,totalprice,deliver\n" +
+                    "from t_sale  limit ?,?";
             ps = conn.prepareStatement(sql);
             ps.setInt(1,index);
             ps.setInt(2,Integer.parseInt(limit));
             rs = ps.executeQuery();
 
             while (rs.next()){
-                Student student = new Student();
-                student.setId(rs.getString("id"));
-                student.setStudentID(rs.getString("studentID"));
-                student.setName(rs.getString("name"));
-                student.setBirth(rs.getString("birth"));
-                student.setClassname(rs.getString("class"));
-                list.add(student);
+                Order order = new Order();
+                order.setYear(rs.getString("year"));
+                order.setName(rs.getString("name"));
+                order.setPurchaseid(rs.getString("purchaseid"));
+                order.setProduceid(rs.getString("produceid"));
+                order.setOrderdate(rs.getString("orderdate"));
+                order.setSpecification(rs.getString("specification"));
+                order.setMaterial(rs.getString("material"));
+                order.setRaise(rs.getString("raise"));
+                order.setSurface(rs.getString("surface"));
+                order.setQuantity(rs.getString("quantity"));
+                order.setPrice(rs.getString("price"));
+                order.setTotalprice(rs.getString("totalprice"));
+                order.setDeliver(rs.getString("deliver"));
+                list.add(order);
             }
         } catch ( SQLException e) {
             e.printStackTrace();
@@ -109,22 +97,18 @@ public class Dao {
         return list;
     }
 
-    public static List<Student> queryByName(String name){
-        List<Student> list = new ArrayList<>();
+    public static List<Order> queryByName(String name){
+        List<Order> list = new ArrayList<>();
         try {
-           load();
+            load();
             String sql ="select id,studentID,name,birth,class from t_mesage where name LIKE \"%"+name+"%\" ";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()){
-                Student student = new Student();
-                student.setId(rs.getString("id"));
-                student.setStudentID(rs.getString("studentID"));
-                student.setName(rs.getString("name"));
-                student.setBirth(rs.getString("birth"));
-                student.setClassname(rs.getString("class"));
-                list.add(student);
+                Order order = new Order();
+
+                list.add(order);
             }
         } catch ( SQLException e) {
             e.printStackTrace();
@@ -134,16 +118,13 @@ public class Dao {
         return list;
     }
 
-    public static void add(Student student){
+    public static void add(Order order){
         int result = 0;
         try {
             load();
             String sql ="insert into t_mesage(studentID,name,birth,class) values(?,?,?,?)";
             ps = conn.prepareStatement(sql);
-            ps.setString(1,student.getStudentID());
-            ps.setString(2,student.getName());
-            ps.setString(3,student.getBirth());
-            ps.setString(4,student.getClassname());
+
             result = ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("啊偶添加失败了喔:"+e.getMessage());
@@ -158,8 +139,8 @@ public class Dao {
 
     public static int getCount(){
         try {
-           load();
-            String sql ="select count(*) as c from t_mesage";
+            load();
+            String sql ="select count(*) as c from t_sale";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             rs.next();
@@ -170,7 +151,7 @@ public class Dao {
         }finally {
             close();
         }
-    return 0;
+        return 0;
     }
     private static void close(){
         if (rs!=null){

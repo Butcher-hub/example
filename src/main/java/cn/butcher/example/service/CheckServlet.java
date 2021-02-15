@@ -7,15 +7,13 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @Author: butcher
- * @Date: 2021/02/03/20:16
+ * @Date: 2021/02/05/20:10
  */
-@WebServlet("/clock")
-public class ClockInServlet extends HttpServlet {
+@WebServlet("/check")
+public class CheckServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request,response);
     }
@@ -28,7 +26,7 @@ public class ClockInServlet extends HttpServlet {
         User user =null;
         if (cookies!=null){
             for (Cookie c:cookies
-                 ) {
+            ) {
                 if (c.getName().equals("userid")){
                     user = DaoUser.getUser(Integer.parseInt(c.getValue()));
                     userid = c.getValue();
@@ -42,20 +40,18 @@ public class ClockInServlet extends HttpServlet {
                 if (userid.equals(user.getUserid()+"")&&userpassword.equals(user.getUserpassword())){
                     HttpSession session = request.getSession();
                     session.setAttribute("userid",userid);
-//                    request.getRequestDispatcher("/page/upOrDown.html").forward(request,response);
-                    response.sendRedirect(request.getContextPath()+"/page/upOrDown.html");
+                    request.getRequestDispatcher("/index.html").forward(request,response);
 
                 }else {
-                    response.sendRedirect(request.getContextPath()+"/page/loginclock.html");
+                    response.sendRedirect(request.getContextPath()+"/page/login.html");
                 }
             }else {
-                response.sendRedirect(request.getContextPath()+"/page/loginclock.html");
+                response.sendRedirect(request.getContextPath()+"/page/login.html");
             }
 
         }else {
             //转到登录界面
-            response.sendRedirect(request.getContextPath()+"/page/loginclock.html");
+            response.sendRedirect(request.getContextPath()+"/page/login.html");
         }
-
     }
 }
